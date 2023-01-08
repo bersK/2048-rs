@@ -1,6 +1,7 @@
 pub mod rl;
 pub mod state;
 pub mod tile;
+pub mod grid;
 use state::GameState;
 
 use raylib::prelude::*;
@@ -42,5 +43,29 @@ fn main() {
             // d.draw_text(format!("{0}", x).as_str(), 12, SCREEN_HEIGHT-80, 40, Color::BLACK);
             d.draw_text(format!("{0:?}", game_state.grid).as_str(), 12, SCREEN_HEIGHT-40, 40, Color::BLACK);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::tile::Tile;
+
+    use super::*;
+
+    #[test]
+    fn update_game_state() {
+        let mut game_state: GameState = GameState::new();
+        game_state.update();
+        assert_eq!(game_state.grid[0][0], 0);
+    }
+
+    #[test]
+    fn get_tile_color() {
+        let tile = Tile::new(Vector2{x: 0.0, y: 0.0}, 0);
+        let color = Tile::get_tile_color(0);
+        assert_eq!(color, Tile::get_tile_color(tile.score));
+        assert_ne!(color, Tile::get_tile_color(128));
+        assert_eq!(Tile::get_tile_color(12800), Tile::get_tile_color(12800));
+        assert_eq!(Tile::get_tile_color(4096), Tile::get_tile_color(12800));
     }
 }
