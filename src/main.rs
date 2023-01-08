@@ -68,4 +68,26 @@ mod tests {
         assert_eq!(Tile::get_tile_color(12800), Tile::get_tile_color(12800));
         assert_eq!(Tile::get_tile_color(4096), Tile::get_tile_color(12800));
     }
+
+    #[test]
+    fn working_tile_update() {
+        let mut game_state: GameState = GameState::new();
+        game_state.grid[2][2] = 2;
+        game_state.grid[0][0] = 2;
+        game_state.update();
+
+        assert_eq!(game_state.tiles[0].unwrap().score, 2);
+        print!("{:?}", game_state.tiles[0].unwrap());
+        assert_eq!(game_state.tiles[8].unwrap().score, 2);
+        print!("{:?}", game_state.tiles[8].unwrap());
+
+        game_state.grid[2][2] = 0;
+        game_state.grid[0][0] = 0;
+        game_state.update();
+
+        let unwrap_none = std::panic::catch_unwind(|| game_state.tiles[0].unwrap());
+        assert!(unwrap_none.is_err());
+        let unwrap_none = std::panic::catch_unwind(|| game_state.tiles[8].unwrap());
+        assert!(unwrap_none.is_err());
+    }
 }
