@@ -3,12 +3,15 @@ pub mod state;
 pub mod tile;
 pub mod grid;
 use state::GameState;
+use grid::Grid;
 
 use raylib::prelude::*;
 
 const SCREEN_WIDTH: i32 = 1920;
 const SCREEN_HEIGHT: i32 = 1080;
 const SCREEN_TITLE: &str = "Hello, World";
+const TILE_SIZE : i32 = 100;
+const PADDING : i32 = 10;
 
 fn main() {
     let (mut rl, thread) = raylib::init()
@@ -17,17 +20,25 @@ fn main() {
         .vsync()
         .build();
 
-    let center = Vector2::new(SCREEN_WIDTH as f32 / 2.0, SCREEN_HEIGHT as f32 / 2.0);
-
     let mut _frame_time: f32 = 0.0;
     let mut _fps: f32 = 0.0;
     let mut _elapsed_time: f32 = 0.0;
     let mut game_state: GameState = GameState::new();
+    let grid_origin: Vector2 = Vector2{x: (SCREEN_WIDTH / 2 - ((TILE_SIZE * 3 + PADDING * 2) / 2)) as f32, y: (SCREEN_HEIGHT / 2 - ((TILE_SIZE * 3 + PADDING * 2) / 2)) as f32};
+    let grid: Grid = Grid::new(grid_origin, 100, 10, 0.2);
+
+    game_state.grid[0][0] = 2;
+    game_state.grid[0][1] = 8;
+    game_state.grid[0][2] = 2;
+    game_state.grid[2][0] = 2;
+    game_state.grid[2][1] = 2048;
+    game_state.grid[2][2] = 2;
 
     while !rl.window_should_close() {
         // UPDATE
         {
-            rl::update(&mut rl, &thread, SCREEN_TITLE);
+            rl::update_title(&mut rl, &thread, SCREEN_TITLE);
+
             _frame_time = rl.get_frame_time();
             _fps = 1.0 / _frame_time;
             _elapsed_time = rl.get_time() as f32;
@@ -37,11 +48,9 @@ fn main() {
         // DRAW
         {
             let mut d = rl.begin_drawing(&thread);
-            d.draw_circle_v(center, 20.0, Color::BLACK);
             d.clear_background(Color::WHITE);
-            d.draw_text(format!("Hello, world! - fps - {_fps}").as_str(), 12, 12, 40, Color::BLACK);
-            // d.draw_text(format!("{0}", x).as_str(), 12, SCREEN_HEIGHT-80, 40, Color::BLACK);
-            d.draw_text(format!("{0:?}", game_state.grid).as_str(), 12, SCREEN_HEIGHT-40, 40, Color::BLACK);
+            grid.draw(&mut d, &mut game_state);
+            d.draw_text(format!("SCORE:\n{0}", game_state.score).as_str(), 12, 0, 40, Color::BLACK);
         }
     }
 }
@@ -63,6 +72,7 @@ mod tests {
     fn get_tile_color() {
         let tile = Tile::new(Vector2{x: 0.0, y: 0.0}, 0);
         let color = Tile::get_tile_color(0);
+        println!("{:?}", color);
         assert_eq!(color, Tile::get_tile_color(tile.score));
         assert_ne!(color, Tile::get_tile_color(128));
         assert_eq!(Tile::get_tile_color(12800), Tile::get_tile_color(12800));

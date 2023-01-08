@@ -1,5 +1,3 @@
-use colors_transform::{Rgb};
-use colors_transform::Color as ColorTrait;
 use raylib::prelude::Color;
 
 use crate::Vector2;
@@ -13,28 +11,23 @@ pub struct Tile {
 impl Tile {
     pub fn new(location: Vector2, score: u32) -> Self { Self { location, score } }
 
-    fn get_tile_color_rgb(score: u32) -> Rgb {
-        match score {
-            0 =>    Rgb::from_hex_str("#eee4da").unwrap(),
-            2 =>    Rgb::from_hex_str("#eee4da").unwrap(),
-            4 =>    Rgb::from_hex_str("#ede0c8").unwrap(),
-            8 =>    Rgb::from_hex_str("#f2b179").unwrap(),
-            16 =>   Rgb::from_hex_str("#f59563").unwrap(),
-            32 =>   Rgb::from_hex_str("#f67c5f").unwrap(),
-            64 =>   Rgb::from_hex_str("#f65e3b").unwrap(),
-            128 =>  Rgb::from_hex_str("#edcf72").unwrap(),
-            256 =>  Rgb::from_hex_str("#edcc61").unwrap(),
-            512 =>  Rgb::from_hex_str("#edc850").unwrap(),
-            1024 => Rgb::from_hex_str("#edc53f").unwrap(),
-            2048 => Rgb::from_hex_str("#edc22e").unwrap(),
-            4096.. => Rgb::from_hex_str("#3c3a32").unwrap(),
-            _ =>    Rgb::from_hex_str("#eee4da").unwrap(),
-        }
-    }
-
     pub fn get_tile_color(score: u32) -> Color {
-        let rgb = Self::get_tile_color_rgb(score);
-        Color::new(rgb.get_red() as u8, rgb.get_green() as u8, rgb.get_blue() as u8, 255)
+        match score {
+            0 =>      Color::new(238, 228, 218, 255),
+            2 =>      Color::new(238, 228, 218, 255),
+            4 =>      Color::new(237, 224, 200, 255),
+            8 =>      Color::new(242, 177, 121, 255),
+            16 =>     Color::new(245, 149, 99, 255),
+            32 =>     Color::new(246, 124, 95, 255),
+            64 =>     Color::new(246, 94, 59, 255),
+            128 =>    Color::new(237, 207, 114, 255),
+            256 =>    Color::new(237, 204, 97, 255),
+            512 =>    Color::new(237, 200, 80, 255),
+            1024 =>   Color::new(237, 197, 63, 255),
+            2048 =>   Color::new(237, 194, 46, 255),
+            4096.. => Color::new(60, 58, 50, 255),
+            _ =>      Color::new(238, 228, 218, 255),
+        }
     }
 
     pub fn generate_tile_idx(x: usize, y: usize) -> usize {

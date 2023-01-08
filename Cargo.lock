@@ -24,12 +24,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "colors-transform"
-version = "0.2.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9226dbc05df4fb986f48d730b001532580883c4c06c5d1c213f4b34c1c157178"
-
-[[package]]
 name = "fs_extra"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -74,6 +68,5 @@ dependencies = [
 name = "rl"
 version = "0.1.0"
 dependencies = [
- "colors-transform",
  "raylib",
 ]

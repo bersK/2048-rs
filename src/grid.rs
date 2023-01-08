@@ -9,7 +9,7 @@ use raylib::prelude::{
 use crate::{state::GameState};
 
 #[derive(Debug)]
-struct Grid {
+pub struct Grid {
     top_right: Vector2,
     tile_size: i32,
     padding: i32,
