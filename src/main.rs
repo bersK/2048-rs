@@ -2,6 +2,8 @@ pub mod rl;
 pub mod state;
 pub mod tile;
 pub mod grid;
+
+use rl::Moves;
 use state::GameState;
 use grid::Grid;
 
@@ -38,11 +40,11 @@ fn main() {
         // UPDATE
         {
             rl::update_title(&mut rl, &thread, SCREEN_TITLE);
+            game_state.move_grid(rl::handle_input(&mut rl));
 
             _frame_time = rl.get_frame_time();
             _fps = 1.0 / _frame_time;
             _elapsed_time = rl.get_time() as f32;
-            game_state.update();
         }
 
         // DRAW
@@ -99,5 +101,28 @@ mod tests {
         assert!(unwrap_none.is_err());
         let unwrap_none = std::panic::catch_unwind(|| game_state.tiles[8].unwrap());
         assert!(unwrap_none.is_err());
+    }
+
+    #[test]
+    fn move_grid_down() {
+        let mut game_state: GameState = GameState::new();
+        game_state.grid[0][2] = 2;
+        game_state.grid[0][0] = 2;
+        game_state.move_grid(Moves::Right);
+
+        assert_eq!(game_state.grid[0][2], 4);
+
+        game_state.grid[0][1] = 2;
+        println!("Before move right\n{:?}", game_state.grid);
+        game_state.move_grid(Moves::Right);
+        println!("After move right\n{:?}", game_state.grid);
+        assert_eq!(game_state.grid[0][2], 4);
+
+        game_state.grid[0][0] = 2;
+        println!("After move left\n{:?}", game_state.grid);
+        game_state.move_grid(Moves::Left);
+        println!("After move left\n{:?}", game_state.grid);
+        assert_eq!(game_state.grid[0][0], 4);
+        assert_eq!(game_state.grid[0][1], 4);
     }
 }
