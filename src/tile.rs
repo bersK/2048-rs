@@ -1,6 +1,6 @@
 use raylib::prelude::Color;
 
-use crate::Vector2;
+use crate::{Vector2, state::GRID_SIZE};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Tile {
@@ -30,8 +30,8 @@ impl Tile {
         }
     }
 
-    pub fn generate_tile_idx(x: usize, y: usize) -> usize {
-        (x * 3) + y
+    pub fn get_idx_1d(x: usize, y: usize) -> usize {
+        (x * GRID_SIZE) + y
     }
 
 }

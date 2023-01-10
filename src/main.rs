@@ -3,7 +3,6 @@ pub mod state;
 pub mod tile;
 pub mod grid;
 
-use rl::Moves;
 use state::GameState;
 use grid::Grid;
 
@@ -26,7 +25,8 @@ fn main() {
     let mut _fps: f32 = 0.0;
     let mut _elapsed_time: f32 = 0.0;
     let mut game_state: GameState = GameState::new();
-    let grid_origin: Vector2 = Vector2{x: (SCREEN_WIDTH / 2 - ((TILE_SIZE * 3 + PADDING * 2) / 2)) as f32, y: (SCREEN_HEIGHT / 2 - ((TILE_SIZE * 3 + PADDING * 2) / 2)) as f32};
+    let offset = TILE_SIZE * (state::GRID_SIZE as i32) + PADDING * (state::GRID_SIZE - 1) as i32;
+    let grid_origin: Vector2 = Vector2{x: (SCREEN_WIDTH / 2 - offset / 2) as f32, y: (SCREEN_HEIGHT / 2 - offset / 2) as f32};
     let grid: Grid = Grid::new(grid_origin, 100, 10, 0.2);
 
     game_state.grid[0][0] = 2;
@@ -35,6 +35,8 @@ fn main() {
     game_state.grid[2][0] = 2;
     game_state.grid[2][1] = 2048;
     game_state.grid[2][2] = 2;
+    game_state.grid[3][3] = 0;
+    game_state.grid[2][3] = 0;
 
     while !rl.window_should_close() {
         // UPDATE
@@ -59,7 +61,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::tile::Tile;
+    use crate::{tile::Tile, rl::Moves};
 
     use super::*;
 
