@@ -4,11 +4,14 @@ use crate::rl::Moves;
 use crate::tile::Tile;
 
 pub const GRID_SIZE: usize = 4;
+pub const GRID_TILES: usize = GRID_SIZE * GRID_SIZE;
+pub type GridRow = [u32; GRID_SIZE];
+pub type GridArray = [GridRow; GRID_SIZE];
 
 #[derive(Debug)]
 pub struct GameState {
-    pub grid: [[u32; 4]; 4],
-    pub tiles: [Option<Tile>; 16],
+    pub grid: GridArray,
+    pub tiles: [Option<Tile>; GRID_TILES],
     pub score: u32,
 }
 
@@ -16,14 +19,14 @@ impl GameState {
     pub fn new() -> Self {
         Self {
             grid: [[0; GRID_SIZE]; GRID_SIZE],
-            tiles: [None; GRID_SIZE * GRID_SIZE],
+            tiles: [None; GRID_TILES],
             score: 0,
         }
     }
 
     pub fn update(&mut self) {
         // Reset the tiles, more work to clean than to rearrange
-        self.tiles = [None; GRID_SIZE * GRID_SIZE];
+        self.tiles = [None; GRID_TILES];
 
         for x in 0..GRID_SIZE {
             for y in 0..GRID_SIZE {
@@ -57,7 +60,7 @@ impl GameState {
     // }
     /// Get a compressed array of the grid in the direction of the move
     #[allow(dead_code)]
-    fn compressed_array(&self, table: &[[u32; GRID_SIZE]; GRID_SIZE], mut x: u32, mut y: u32, x_step: u32, y_step: u32) -> [u32; GRID_SIZE] {
+    fn compressed_array(&self, table: &GridArray, mut x: u32, mut y: u32, x_step: u32, y_step: u32) -> [u32; GRID_SIZE] {
         let mut temp: [u32; 4] = [0; 4];
         let mut idx: usize = 0;
         for _ in 0..temp.len() {
