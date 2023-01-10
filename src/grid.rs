@@ -25,10 +25,27 @@ impl Grid {
                 let y = self.top_right.y + tile.location.y * (self.tile_size + self.padding) as f32;
                 let rect = Rectangle{x, y, height: self.tile_size as f32, width: self.tile_size as f32};
                 // TODO(stefan): Will be adding a method for custom aligned based on the size of the integer
-                let (x_offset, y_offset) = (self.tile_size / 2, self.tile_size / 2);
+                let (mut x_offset, mut y_offset, mut font_size) = (10, 15, 40);
+                Grid::modify_font_offsets(tile.score, &mut x_offset, &mut y_offset, &mut font_size);
                 draw_handle.draw_rectangle_rounded(rect, self.roundedness, 12, tile::Tile::get_tile_color(tile.score));
-                draw_handle.draw_text(format!("{0}", tile.score).as_str(), x as i32 + self.tile_size / 2 - x_offset, y as i32 + self.tile_size / 2 - y_offset, 40, Color::BLACK);
+                draw_handle.draw_text(
+                    &tile.score.to_string(),
+                    x as i32 + self.tile_size / 2 - x_offset,
+                    y as i32 + self.tile_size / 2 - y_offset,
+                    font_size,
+                    Color::BLACK);
             }
         }
     }
+
+    fn modify_font_offsets(score: u32, x_offset: &mut i32, y_offset: &mut i32, font_size: &mut i32) {
+        match score {
+            0..=8 => { *x_offset = 18; *y_offset = 33; *font_size = 80;},
+            16..=64 => { *x_offset = 22; *y_offset = 25; *font_size = 60; },
+            128..=512 => { *x_offset = 25; *y_offset = 15; *font_size = 40;},
+            1024..=4096 => { *x_offset = 45; *y_offset = 15; *font_size = 40; },
+            _ => {},
+        }
+    }
+
 }

@@ -32,10 +32,10 @@ fn main() {
     game_state.grid[0][0] = 2;
     game_state.grid[0][1] = 8;
     game_state.grid[0][2] = 2;
-    game_state.grid[2][0] = 2;
+    game_state.grid[2][0] = 128;
     game_state.grid[2][1] = 2048;
-    game_state.grid[2][2] = 2;
-    game_state.grid[3][3] = 0;
+    game_state.grid[2][2] = 16;
+    game_state.grid[3][3] = 4096;
     game_state.grid[2][3] = 0;
 
     while !rl.window_should_close() {
@@ -71,6 +71,18 @@ mod tests {
         game_state.update();
         assert_eq!(game_state.grid[0][0], 0);
     }
+
+    #[test]
+    fn get_compressed_array() {
+        let mut game_state: GameState = GameState::new();
+        println!("{:?}", game_state.grid[0][0]);
+        let val = GameState::get_value(&mut game_state.grid);
+        *val = 2;
+        println!("{:?}", game_state.grid[0][0]);
+
+        assert_eq!(game_state.grid[0][0], 2);
+    }
+
 
     #[test]
     fn get_tile_color() {

@@ -30,7 +30,7 @@ impl GameState {
 
         for x in 0..GRID_SIZE {
             for y in 0..GRID_SIZE {
-                let score = self.grid[x][y];
+                let score = self.grid[y][x];
                 self.tiles[Tile::get_idx_1d(x, y)] = Some(Tile::new(Vector2{x: x as f32, y: y as f32}, score));
             }
         }
@@ -59,11 +59,14 @@ impl GameState {
     //     }
     // }
     /// Get a compressed array of the grid in the direction of the move
-    #[allow(dead_code)]
-    fn compressed_array(&self, table: &GridArray, mut x: u32, mut y: u32, x_step: u32, y_step: u32) -> [u32; GRID_SIZE] {
-        let mut temp: [u32; 4] = [0; 4];
+    pub fn get_value(table: &mut GridArray) -> &mut u32 {
+        return &mut table[0][0];
+    }
+
+    pub fn compressed_array(&self, table: &GridArray, mut x: u32, mut y: u32, x_step: u32, y_step: u32) -> GridRow {
+        let mut temp: GridRow = [0; 4];
         let mut idx: usize = 0;
-        for _ in 0..temp.len() {
+        for _ in 0..GRID_SIZE {
             if table[y as usize][x as usize] != 0 {
                 temp[idx] = table[y as usize][x as usize];
                 idx += 1;
