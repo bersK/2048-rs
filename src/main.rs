@@ -2,6 +2,7 @@ pub mod rl;
 pub mod state;
 pub mod tile;
 pub mod grid;
+pub mod utils;
 
 use state::GameState;
 use grid::Grid;
@@ -36,7 +37,7 @@ fn main() {
     game_state.grid[2][1] = 2048;
     game_state.grid[2][2] = 16;
     game_state.grid[3][3] = 4096;
-    game_state.grid[2][3] = 0;
+    game_state.grid[2][3] = 64;
 
     while !rl.window_should_close() {
         // UPDATE
@@ -138,5 +139,12 @@ mod tests {
         println!("After move left\n{:?}", game_state.grid);
         assert_eq!(game_state.grid[0][0], 4);
         assert_eq!(game_state.grid[0][1], 4);
+    }
+
+    #[test]
+    fn test_clamp() {
+        let val = 10;
+        assert_eq!(5, utils::clamp(val, 5, 0));
+        assert_eq!(5, utils::clamp(val, 0, 5));
     }
 }

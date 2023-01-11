@@ -28,6 +28,11 @@ impl Grid {
                 let (mut x_offset, mut y_offset, mut font_size) = (10, 15, 40);
                 Grid::modify_font_offsets(tile.score, &mut x_offset, &mut y_offset, &mut font_size);
                 draw_handle.draw_rectangle_rounded(rect, self.roundedness, 12, tile::Tile::get_tile_color(tile.score));
+
+                // Draw the score text if the score is above 0
+                if tile.score <= 0 {
+                    continue;
+                }
                 draw_handle.draw_text(
                     &tile.score.to_string(),
                     x as i32 + self.tile_size / 2 - x_offset,
